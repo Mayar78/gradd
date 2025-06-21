@@ -1,0 +1,101 @@
+<section class="ms-5">
+ <div class="ms-4">
+   <div class="recommendations-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading your personalized recommendations...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="loadRecommendations()">Try Again</button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !error">
+
+    <!-- Incomplete Profile -->
+    <div *ngIf="!profileComplete && incompleteProfileData" class="incomplete-profile">
+      <div class="alert alert-warning bg-light-subtle">
+        <h2> <i class="fa-solid fa-warning me-1 text-warning fs-2"></i>{{ incompleteProfileData.title }}</h2>
+        <p>{{ incompleteProfileData.message }}</p>
+        <div class="missing-fields">
+          <h3>Missing Information:</h3>
+          <ul>
+            <li *ngFor="let field of incompleteProfileData.missingFields">{{ field }}</li>
+          </ul>
+        </div>
+        <p class="action-required">{{ incompleteProfileData.actionRequired }}</p>
+        <button (click)="completeProfile()" class="btn-complete-profile">
+          Complete My Profile Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Recommendations (Profile Complete) -->
+    <div *ngIf="profileComplete">
+      <!-- Top-Level Metadata -->
+      <section class="response-metadata">
+      
+        <ul>
+          <li><strong>Generated At:</strong> {{ fullResponse.generatedAt }}</li>
+          <li><strong>Your AI Message:</strong> {{ fullResponse.aiPersonalizedMessage }}</li>
+          <li><strong>Confidence Level:</strong> {{ fullResponse.confidenceLevel }}</li>
+          <li><strong>Total Safe Recommendations:</strong> {{ fullResponse.totalSafeRecommendations }}</li>
+          <li><strong>Total Conflicted Items:</strong> {{ fullResponse.totalConflictedItems }}</li>
+          <li><strong>Next Steps Advice:</strong> {{ fullResponse.nextStepsAdvice }}</li>
+        </ul>
+
+        <h3>Key Insights:</h3>
+        <ul>
+          <li *ngFor="let insight of fullResponse.keyInsights">{{ insight }}</li>
+        </ul>
+      </section>
+
+      <!-- Summary -->
+      <p class="summary"><strong>Summary:</strong> {{ summary }}</p>
+
+      
+
+      <!-- Recommendation Cards -->
+      <div class="recommendation-cards">
+        <div *ngFor="let rec of recommendations" class="recommendation-card">
+          <div class="card-header">
+            <h3>{{ rec.productName }}</h3>
+            <span class="score-badge">Score: {{ rec.finalScore.toFixed(1) }}</span>
+          </div>
+
+          <div class="card-body">
+            <div class="product-image">
+              <img [src]="rec.productPictureUrl" [alt]="rec.productName">
+            </div>
+
+            <div class="product-details">
+             
+              <p><strong>Description:</strong> {{ rec.productDescription }}</p>
+              <p><strong>Active Ingredient:</strong> {{ rec.activeIngredient }}</p>
+              <p><strong>Price:</strong> {{ rec.productPrice | currency  : 'EGP'}}</p>
+              <p><strong>Safety Score:</strong> {{ rec.safetyScore }}/5</p>
+              <p><strong>Effectiveness Score:</strong> {{ rec.effectivenessScore }}/5</p>
+              <p><strong>Value Score:</strong> {{ rec.valueScore.toFixed(2) }}/5</p>
+              <p><strong>Has Conflict:</strong> {{ rec.hasConflict }}</p>
+              <p *ngIf="rec.hasConflict"><strong>Conflict Details:</strong> {{ rec.conflictDetails }}</p>
+              <p><strong>Reason:</strong> {{ rec.recommendationReason }}</p>
+              <p><strong>Created At:</strong> {{ rec.createdAt }}</p>
+            </div>
+          </div>
+
+          <!-- <div class="card-footer">
+            <button class="btn-details" [routerLink]="['/main/productdetails', rec.id]">View Details</button>
+            <button class="btn-add" (click)="addToCart(rec.id)">Add to Cart</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ </div>
+
+</section>

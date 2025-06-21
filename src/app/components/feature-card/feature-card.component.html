@@ -1,0 +1,49 @@
+<div class="features-container">
+  <!-- Enhanced Carousel Section -->
+  <div class="carousel-container">
+    <owl-carousel-o [options]="customOptions">
+      @for (item of carouselItems; track item.id) {
+        <ng-template carouselSlide>
+          <div class="carousel-slide">
+            <img 
+              [src]="item.imageUrl" 
+              [alt]="item.title"
+              (load)="onImageLoad($event)"
+              (error)="onImageError($event)"
+            >
+            <div class="carousel-overlay">
+              <h2 class="carousel-title">{{ item.title }}</h2>
+              <p class="carousel-description">{{ item.description }}</p>
+              
+            </div>
+          </div>
+        </ng-template>
+      }
+    </owl-carousel-o>
+  </div>
+
+  <!-- Features Cards Section -->
+  <div class="features-section">
+    <div class="features-grid">
+      @for (card of featureCards; track card.id; let i = $index) {
+        <div class="feature-card" [class]="card.gradientClass">
+          <div class="card-number">{{ i + 1 }}</div>
+          
+          <div class="card-icon">
+            <i [class]="card.iconClass"></i>
+          </div>
+          
+          <div class="card-content">
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-description">{{ card.description }}</p>
+            
+            <button class="card-button" (click)="card.action()">
+              <span>{{ card.buttonText }}</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
